@@ -1,5 +1,7 @@
-import { AggregateRoot } from "src/@core/common/domain/aggregate-root";
-import Uuid from "src/@core/common/domain/value-object/uuid.vo";
+import { AggregateRoot } from "../../../common/domain/aggregate-root";
+import { ICollection, MyCollectionFactory } from "../../../common/domain/my-collections";
+import Uuid from "../../../common/domain/value-object/uuid.vo";
+import { EventSection, EventSectionId } from "./event-section";
 import { PartnerId } from "./partner.entity";
 
 export class EventId extends Uuid { }
@@ -20,6 +22,7 @@ export type EventConstructorProps = {
     total_spots: number;
     total_spots_reserved: number;
     partner_id: PartnerId | string;
+    sections?: Set<EventSection>;
 }
 
 export class Event extends AggregateRoot {
@@ -33,6 +36,7 @@ export class Event extends AggregateRoot {
     total_spots: number;
     total_spots_reserved: number;
     partner_id: PartnerId;
+    sections: Set<EventSection>;
 
     constructor(props: EventConstructorProps) {
         super();
@@ -51,20 +55,20 @@ export class Event extends AggregateRoot {
             props.partner_id instanceof PartnerId
                 ? props.partner_id
                 : new PartnerId(props.partner_id);
-        //this._sections = MyCollectionFactory.create<EventSection>(this);
+        this.sections = props.sections ?? new Set<EventSection>();
     }
 
     static create(command: CreateEventCommand) {
         const event = new Event({
-          ...command,
-          description: command.description ?? null,
-          is_published: false,
-          total_spots: 0,
-          total_spots_reserved: 0,
+            ...command,
+            description: command.description ?? null,
+            is_published: false,
+            total_spots: 0,
+            total_spots_reserved: 0,
         });
-        
+
         return event;
-      }
+    }
 
     toJSON() {
         return {
@@ -76,7 +80,7 @@ export class Event extends AggregateRoot {
             total_spots: this.total_spots,
             total_spots_reserved: this.total_spots_reserved,
             partner_id: this.partner_id.value,
-            //sections: [...this._sections].map((section) => section.toJSON()),
+            sections: [...this.sections].map((section) => section.toJSON()),
         };
     }
 

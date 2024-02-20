@@ -1,36 +1,36 @@
-import { AggregateRoot } from "src/@core/common/domain/aggregate-root";
-import Uuid from "src/@core/common/domain/value-object/uuid.vo";
+import { AggregateRoot } from "../../../common/domain/aggregate-root";
+import Uuid from "../../../common/domain/value-object/uuid.vo";
 
-export class PartnerId extends Uuid{}
+export class PartnerId extends Uuid { }
 
 export type PartnerConstructorProps = {
     id?: PartnerId | string;
     name: string;
 };
 
-export class Partner extends AggregateRoot{
+export class Partner extends AggregateRoot {
 
     id: PartnerId;
     name: string;
 
-    constructor(props: PartnerConstructorProps){
+    constructor(props: PartnerConstructorProps) {
         super();
 
-        this.id = 
+        this.id =
             typeof props.id === 'string'
-            ? new PartnerId(props.id)
-            : props.id ?? new PartnerId();
+                ? new PartnerId(props.id)
+                : props.id ?? new PartnerId();
 
         this.name = props.name;;
 
     }
 
-    static create(command: { name: string}){
+    static create(command: { name: string }) {
         return new Partner({
             name: command.name,
         });
     }
-    
+
 
     toJSON() {
         return {
