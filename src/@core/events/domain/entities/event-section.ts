@@ -8,10 +8,12 @@ export class EventSectionId extends Uuid { }
 
 export type EventSectionCreateCommand = {
     name: string;
-    description: string | null;
+    description?: string | null;
     total_spots: number;
     price: number;
 }
+
+
 export type EventSectionConstructorProps = {
     id?: EventSectionId | string;
     name: string;
@@ -57,9 +59,17 @@ export class EventSection extends Entity {
             total_spots_reserved: 0,
         });
 
-        //section.initSpots();
+        section.initSpots();
         return section;
     }
+
+    private initSpots() {
+        for (let i = 0; i < this.total_spots; i++) {
+            this.spots.add(EventSpot.create());
+        }
+    }
+
+
 
     toJSON() {
         return {

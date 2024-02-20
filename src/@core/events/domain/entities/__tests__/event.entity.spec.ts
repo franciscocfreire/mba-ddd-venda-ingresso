@@ -1,5 +1,3 @@
-import { EventSection } from "../event-section"
-import { EventSpot } from "../event-spot"
 import { Event } from "../event.entity"
 import { PartnerId } from "../partner.entity"
 
@@ -11,17 +9,17 @@ test('deve criar um evento', () => {
         partner_id: new PartnerId()
     })
 
-    const section = EventSection.create({
+    event.addSection({
         name: 'Sessao 1',
         description: 'Descricao da sessao',
         total_spots: 100,
         price: 1000
     });
 
-    event.sections.add(section);
+    const [section] = event.sections;
 
-    const spot = EventSpot.create();
-    section.spots.add(spot);
-
+    expect(event.sections.size).toBe(1);
+    expect(event.total_spots).toBe(100);
+    expect(section.spots.size).toBe(100);
     console.dir(event.toJSON(), {depth: 10});
 })

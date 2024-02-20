@@ -12,6 +12,14 @@ export type CreateEventCommand = {
     date: Date;
     partner_id: PartnerId;
 }
+
+export type AddSectionCommand = {
+    name: string,
+    description?: string | null,
+    total_spots: number;
+    price: number;
+}
+
 export type EventConstructorProps = {
     id?: EventId | string;
     name: string;
@@ -68,6 +76,12 @@ export class Event extends AggregateRoot {
         });
 
         return event;
+    }
+
+    addSection(command: AddSectionCommand ){
+        const section = EventSection.create(command);
+        this.sections.add(section);
+        this.total_spots += section.total_spots;
     }
 
     toJSON() {
