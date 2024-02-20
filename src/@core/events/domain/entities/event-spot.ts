@@ -30,11 +30,27 @@ export class EventSpot extends Entity {
 
     static create() {
         return new EventSpot({
-          location: null,
-          is_published: false,
-          is_reserved: false,
+            location: null,
+            is_published: false,
+            is_reserved: false,
         });
-      }
+    }
+
+    changeLocation(location: string) {
+        this.location = this.location;
+    }
+
+    publish() {
+        this.is_published = true;
+    }
+
+    unPublish() {
+        this.is_published = false;
+    }
+
+    publishAll() {
+        this.publish()
+    }
 
     toJSON() {
         return {

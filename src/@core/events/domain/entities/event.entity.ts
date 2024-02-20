@@ -1,14 +1,13 @@
 import { AggregateRoot } from "../../../common/domain/aggregate-root";
-import { ICollection, MyCollectionFactory } from "../../../common/domain/my-collections";
 import Uuid from "../../../common/domain/value-object/uuid.vo";
-import { EventSection, EventSectionId } from "./event-section";
+import { EventSection } from "./event-section";
 import { PartnerId } from "./partner.entity";
 
 export class EventId extends Uuid { }
 
 export type CreateEventCommand = {
     name: string;
-    description: string | null;
+    description?: string | null;
     date: Date;
     partner_id: PartnerId;
 }
@@ -82,6 +81,31 @@ export class Event extends AggregateRoot {
         const section = EventSection.create(command);
         this.sections.add(section);
         this.total_spots += section.total_spots;
+    }
+    
+    changeName(name: string){
+        this.name = name;
+    }
+
+    changeDescription(description: string | null){
+        this.description = description;
+    }
+
+    changeDate(date: Date){
+        this.date = date;
+    }
+
+    publish() {
+        this.is_published = true;
+    }
+
+    unPublish() {
+        this.is_published = false;
+    }
+
+    publishAll() {
+        this.publish()
+        this.sections.forEach((section) => section.publishAll());
     }
 
     toJSON() {

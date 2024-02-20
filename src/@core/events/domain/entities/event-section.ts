@@ -69,7 +69,22 @@ export class EventSection extends Entity {
         }
     }
 
+    changePrice(price: number){
+        this.price = price;
+    }
 
+    publish() {
+        this.is_published = true;
+    }
+
+    unPublish() {
+        this.is_published = false;
+    }
+
+    publishAll() {
+        this.publish()
+        this.spots.forEach((spot) => spot.publishAll());
+    }
 
     toJSON() {
         return {
