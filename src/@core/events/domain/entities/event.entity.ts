@@ -1,5 +1,5 @@
 import { AggregateRoot } from "../../../common/domain/aggregate-root";
-import Uuid from "../../../common/domain/value-object/uuid.vo";
+import Uuid from "../../../common/domain/value-objects/uuid.vo";
 import { EventSection } from "./event-section";
 import { PartnerId } from "./partner.entity";
 
@@ -77,21 +77,21 @@ export class Event extends AggregateRoot {
         return event;
     }
 
-    addSection(command: AddSectionCommand ){
+    addSection(command: AddSectionCommand) {
         const section = EventSection.create(command);
         this.sections.add(section);
         this.total_spots += section.total_spots;
     }
-    
-    changeName(name: string){
+
+    changeName(name: string) {
         this.name = name;
     }
 
-    changeDescription(description: string | null){
+    changeDescription(description: string | null) {
         this.description = description;
     }
 
-    changeDate(date: Date){
+    changeDate(date: Date) {
         this.date = date;
     }
 

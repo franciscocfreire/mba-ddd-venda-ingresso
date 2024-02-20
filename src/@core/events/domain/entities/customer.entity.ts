@@ -1,6 +1,6 @@
-import Uuid from '../../../common/domain/value-object/uuid.vo';
+import Uuid from '../../../common/domain/value-objects/uuid.vo';
 import { AggregateRoot } from '../../../common/domain/aggregate-root';
-import Cpf from '../../../common/domain/value-object/cpf.vo';
+import Cpf from '../../../common/domain/value-objects/cpf.vo';
 
 export class CustomerId extends Uuid { }
 
@@ -19,10 +19,10 @@ export class Customer extends AggregateRoot {
 
     constructor(props: CustomerConstructorProps) {
         super();
-        this.id = 
+        this.id =
             typeof props.id === 'string'
-            ? new CustomerId(props.id)
-            : props.id ?? new CustomerId();
+                ? new CustomerId(props.id)
+                : props.id ?? new CustomerId();
         props.id;
         this.cpf = props.cpf;
         this.name = props.name;

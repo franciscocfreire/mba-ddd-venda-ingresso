@@ -1,5 +1,5 @@
 import { AggregateRoot } from "../../../common/domain/aggregate-root";
-import Uuid from "../../../common/domain/value-object/uuid.vo";
+import Uuid from "../../../common/domain/value-objects/uuid.vo";
 import { Event } from "./event.entity";
 
 export class PartnerId extends Uuid { }
@@ -45,7 +45,7 @@ export class Partner extends AggregateRoot {
         });
     }
 
-    changeName(name: string){
+    changeName(name: string) {
         this.name = name;
     }
 

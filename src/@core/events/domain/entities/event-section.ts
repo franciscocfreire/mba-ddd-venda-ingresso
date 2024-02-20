@@ -1,7 +1,7 @@
 import { AggregateRoot } from "../../../common/domain/aggregate-root";
 import { Entity } from "../../../common/domain/entity";
 import { ICollection, MyCollectionFactory } from "../../../common/domain/my-collections";
-import Uuid from "../../../common/domain/value-object/uuid.vo";
+import Uuid from "../../../common/domain/value-objects/uuid.vo";
 import { EventSpot } from "./event-spot";
 
 export class EventSectionId extends Uuid { }
@@ -69,7 +69,7 @@ export class EventSection extends Entity {
         }
     }
 
-    changePrice(price: number){
+    changePrice(price: number) {
         this.price = price;
     }
 
