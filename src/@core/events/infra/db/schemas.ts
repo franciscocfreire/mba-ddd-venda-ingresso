@@ -10,6 +10,9 @@ import { CpfSchemaType } from './types/cpf.schema.type';
 import { EventSpotIdSchemaType } from './types/event-spot-id.schema.type';
 import { EventSectionIdSchemaType } from './types/event-section.schema.type';
 import { EventIdSchemaType } from './types/event-id.schema.type';
+import { SpotReservation } from '../../domain/entities/sport-reservation.entity';
+import { Order, OrderStatus } from '../../domain/entities/order.entity';
+import { OrderIdSchemaType } from './types/order-id.schema-type';
 
 export const PartnerSchema = new EntitySchema<Partner>({
     class: Partner,
@@ -112,3 +115,53 @@ export const EventSpotSchema = new EntitySchema<EventSpot>({
         },
     },
 });
+
+export const SpotReservationSchema = new EntitySchema<SpotReservation>({
+    class: SpotReservation,
+    properties: {
+      spot_id: {
+        customType: new EventSpotIdSchemaType(),
+        primary: true,
+        reference: 'm:1',
+        entity: () => EventSpot,
+        mapToPk: true,
+      },
+      reservation_date: { type: 'date' },
+      customer_id: {
+        reference: 'm:1',
+        entity: () => Customer,
+        mapToPk: true,
+        hidden: true,
+        inherited: true,
+        customType: new CustomerIdSchemaType(),
+      },
+    },
+  });
+
+  export const OrderSchema = new EntitySchema<Order>({
+    class: Order,
+    properties: {
+      id: {
+        customType: new OrderIdSchemaType(),
+        primary: true,
+      },
+      amount: { type: 'number' },
+      status: { enum: true, items: () => OrderStatus },
+      customer_id: {
+        reference: 'm:1',
+        entity: () => Customer,
+        mapToPk: true,
+        hidden: true,
+        inherited: true,
+        customType: new CustomerIdSchemaType(),
+      },
+      event_spot_id: {
+        reference: 'm:1',
+        entity: () => EventSpot,
+        hidden: true,
+        mapToPk: true,
+        inherited: true,
+        customType: new EventSpotIdSchemaType(),
+      },
+    },
+  });
