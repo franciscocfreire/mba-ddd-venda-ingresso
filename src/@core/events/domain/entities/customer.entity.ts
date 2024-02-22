@@ -36,6 +36,10 @@ export class Customer extends AggregateRoot {
 
     }
 
+    changeName(name: string) {
+        this.name = name;        
+      }
+
     toJSON() {
         return {
             id: this.id,
