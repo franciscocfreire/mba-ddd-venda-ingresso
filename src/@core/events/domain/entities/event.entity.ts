@@ -3,6 +3,7 @@ import { AnyCollection, ICollection, MyCollectionFactory } from "../../../common
 import Uuid from "../../../common/domain/value-objects/uuid.vo";
 import { EventChangedSectionInformation } from "../events/domain-events/event-changed-section-information";
 import { EventChangedSpotLocation } from "../events/domain-events/event-changed-spot-location";
+import { EventMarkedSpotAsReserved } from "../events/domain-events/event-marked-spot-as-reserved.event";
 import { EventSection, EventSectionId } from "./event-section";
 import { EventSpotId } from "./event-spot";
 import { PartnerId } from "./partner.entity";
@@ -157,6 +158,34 @@ export class Event extends AggregateRoot {
         );
     }
 
+    allowReserveSpot(data: { section_id: EventSectionId; spot_id: EventSpotId }) {
+        if (!this.is_published) {
+            return false;
+        }
+
+        const section = this.sections.find((s) => s.id.equals(data.section_id));
+        if (!section) {
+            throw new Error('Section not found');
+        }
+
+        return section.allowReserveSpot(data.spot_id);
+    }
+
+    markSpotAsReserved(command: {
+        section_id: EventSectionId;
+        spot_id: EventSpotId;
+    }) {
+        const section = this.sections.find((s) => s.id.equals(command.section_id));
+
+        if (!section) {
+            throw new Error('Section not found');
+        }
+
+        section.markSpotAsReserved(command.spot_id);
+        this.addEvent(
+            new EventMarkedSpotAsReserved(this.id, section.id, command.spot_id),
+        );
+    }
 
     get sections(): ICollection<EventSection> {
         return this._sections as ICollection<EventSection>;
